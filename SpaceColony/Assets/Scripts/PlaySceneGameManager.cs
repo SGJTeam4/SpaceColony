@@ -35,6 +35,7 @@ public class PlaySceneGameManager : MonoBehaviour {
 	private int igakuLevel = 1;
 	private int syokuryoLevel = 1;
 	private int eiseiLevel = 1;
+	private int shigenSaisyuLevel = 1;
 
 
 	//イベントに関する変数
@@ -52,11 +53,21 @@ public class PlaySceneGameManager : MonoBehaviour {
 		Log3.text = "";
 	}
 
-	// Use this for initialization
+	// Use this for initializationys
 	void Start () {
-		jinkoValue = 80;
-		shigenValue = 100;
-		kankyoValue = 100;
+		int tmp = PlayerPrefs.GetInt (PlayerPrefsKeys.FirstFlag,0);
+
+		Debug.Log("AAA" + (tmp));
+		if (tmp == 0) {//初回起動のとき
+			PlayerPrefs.SetInt (PlayerPrefsKeys.FirstFlag, 1);
+			jinkoValue = 80;
+			shigenValue = 100;
+			kankyoValue = 100;
+		} else {
+			jinkoValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Population);
+			shigenValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Resource);
+			kankyoValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Environment);
+		}
 	}
 	void addLog(string str){
 		Log3.text = Log2.text;
@@ -120,7 +131,6 @@ public class PlaySceneGameManager : MonoBehaviour {
 			}
 		} else{
 			tmp = Random.value * 100;
-			Debug.Log("AAA" + (tmp) + " < " +(nowYear * 0.2));
 			if(tmp < nowYear * 0.2){
 
 				InsekiEvent ();
@@ -216,9 +226,34 @@ public class PlaySceneGameManager : MonoBehaviour {
 	/// <summary>
 	/// ボタン系関数
 	/// </summary>
-	public void buttonClicked(){
+	public void kankyoClicked(){
+		saveData ();
+		/*
 		kankyoValue -= 10;
 		shigenValue += 20 * jinkoValue * 0.01;
-		refresh ();
+		refresh ();*/
 	}
+
+	public void shigenClicked(){
+		saveData ();
+	}
+
+	public void jinkoClicked(){
+		saveData ();
+	}
+
+
+	public void saveData(){
+		PlayerPrefs.SetInt (PlayerPrefsKeys.Population			, jinkoValue);
+		PlayerPrefs.SetInt (PlayerPrefsKeys.Resource			, shigenValue);
+		PlayerPrefs.SetInt (PlayerPrefsKeys.Environment			, kankyoValue );
+		PlayerPrefs.SetInt (PlayerPrefsKeys.CollectResource		, shigenSaisyuLevel);
+		PlayerPrefs.SetInt (PlayerPrefsKeys.RestoreEnvironment	, kankyoSyuhukuLevel);
+		PlayerPrefs.SetInt (PlayerPrefsKeys.Equipment			, soubiLevel );
+		PlayerPrefs.SetInt (PlayerPrefsKeys.Medicine			, igakuLevel );
+		PlayerPrefs.SetInt (PlayerPrefsKeys.Food				, syokuryoLevel);
+		PlayerPrefs.SetInt (PlayerPrefsKeys.ReproduceResource	, shigenSaiseiLevel);
+		PlayerPrefs.SetInt (PlayerPrefsKeys.Health				, eiseiLevel);
+	}
+
 }
