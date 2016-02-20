@@ -41,20 +41,39 @@ public class ReinforceSceneController : MonoBehaviour {
     public GameObject itemPrefab;
 
 
+    // おためしよう
+    public Text[] categoryName = new Text[3];
+
+
 	// Use this for initialization
 	void Start () {
         //SetDisplay("Resource");
-        //SetDisplay("Population");
-        SetDisplay("Environment");
+        SetDisplay("Population");
+        //SetDisplay("Environment");
+
+        TestInitParameter();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+	    SetMyParameter();
 	}
 
 
 
+    public void TestInitParameter(){
+        PlayerPrefs.SetInt("Resource", 100);
+        PlayerPrefs.GetInt("Population", 100);
+        PlayerPrefs.GetInt("Environment", 100);
+    }
+
+
+    public void SetMyParameter(){
+        this.categoryName[0].text = PlayerPrefs.GetInt("Resource").ToString();
+        this.categoryName[1].text = PlayerPrefs.GetInt("Population").ToString();
+        this.categoryName[2].text = PlayerPrefs.GetInt("Environment").ToString();
+
+    }
 
 
     /// <summary>
@@ -67,21 +86,21 @@ public class ReinforceSceneController : MonoBehaviour {
         {
             case "Resource":
                 this.categoryLabel.text = "資源";
-                CreateEachItem(this.reinforceItem[0], this.displayPlace[0], "資源採取", "Lv_ReproduceResource", "自然環境に手を加え、エネルギー資源を得る", "環境" + GetChangeValue("ReproduceResource"));
-                CreateEachItem(this.reinforceItem[1], this.displayPlace[1], "環境修復", "Lv_RestoreResource", "植林技術などで、環境の回復能力を上げる", "資源" + GetChangeValue("_RestoreResource"));
-                CreateEachItem(this.reinforceItem[2], this.displayPlace[2], "装備", "Lv_Equipment", "隕石の飛来により失われる命を減らすことができる", "資源" + GetChangeValue("Equipment"));                   
+                CreateEachItem(this.reinforceItem[0], this.displayPlace[0], "資源採取", "CollectResource", "自然環境に手を加え、エネルギー資源を得る", "環境");
+                CreateEachItem(this.reinforceItem[1], this.displayPlace[1], "環境修復", "RestoreEnvironment", "植林技術などで、環境の回復能力を上げる", "資源");
+                CreateEachItem(this.reinforceItem[2], this.displayPlace[2], "装備", "Equipment", "隕石の飛来により失われる命を減らすことができる", "資源");                   
                 break;
 
             case "Population":
                 this.categoryLabel.text = "人口";
-                CreateEachItem(this.reinforceItem[0], this.displayPlace[0], "医学", "Lv_Medicina", "医療技術を発展させ、病気により失われる命を減らすことができる", "資源" + GetChangeValue("Medicina"));
-                CreateEachItem(this.reinforceItem[1], this.displayPlace[1], "食料", "Lv_Food", "災害時の食糧難により失われる命を減らすことができる", "資源" + GetChangeValue("Food"));
+                CreateEachItem(this.reinforceItem[0], this.displayPlace[0], "医学", "Medicina", "医療技術を発展させ、病気により失われる命を減らすことができる", "資源");
+                CreateEachItem(this.reinforceItem[1], this.displayPlace[1], "食料", "Food", "災害時の食糧難により失われる命を減らすことができる", "資源");
                 break;
 
             case "Environment":
                 this.categoryLabel.text = "環境";
-                CreateEachItem(this.reinforceItem[0], this.displayPlace[0], "資源再生", "Lv_ReproduceResource", "再生可能エネルギーの導入により、資源の消費量を減らす", "資源" + GetChangeValue("ReproduceResource"));
-                CreateEachItem(this.reinforceItem[1], this.displayPlace[1], "衛生", "Lv_Health", "衛生技術を発展させ、疫病や災害の発生率を下げる", "資源" + GetChangeValue("Health"));                   
+                CreateEachItem(this.reinforceItem[0], this.displayPlace[0], "資源再生", "ReproduceResource", "再生可能エネルギーの導入により、資源の消費量を減らす", "資源");
+                CreateEachItem(this.reinforceItem[1], this.displayPlace[1], "衛生", "Health", "衛生技術を発展させ、疫病や災害の発生率を下げる", "資源");                   
                 break;
         }
 
@@ -97,29 +116,12 @@ public class ReinforceSceneController : MonoBehaviour {
     /// <param name="in_prefsKey">PlayerPrefsのキーの名前</param>
     /// <param name="in_detailSentence">説明文</param>
     /// <param name="in_buttonLabel">レベルアップボタンのラベル名</param>
-    public void CreateEachItem(GameObject in_item, Transform in_displayTrans, string in_systemName, string in_prefsKey, string in_detailSentence, string in_buttonLabel)
+    public void CreateEachItem(GameObject in_item, Transform in_displayTrans, string in_systemName, string in_prefsKey, string in_detailSentence, string in_requiredCategory)
     {
         in_item = Instantiate(this.itemPrefab);
         in_item.transform.SetParent(in_displayTrans, false);
-        in_item.GetComponent<ReinforceItem>().SetParameter(in_systemName, in_prefsKey, in_detailSentence, in_buttonLabel);
-
+        in_item.GetComponent<ReinforceItem>().SetParameter(in_systemName, in_prefsKey, in_detailSentence, in_requiredCategory);
     }
-
-
-    /// <summary>
-    /// レベルアップによって変動する値を取得
-    /// </summary>
-    /// <param name="in_systemName">システムの名前(分岐するためです)</param>
-    /// <returns></returns>
-    public int GetChangeValue(string in_systemName){
-        int value = 0;
-
-        // とりあえず
-        value = -10;
-
-        return value;
-    }
-
 
 
 }
