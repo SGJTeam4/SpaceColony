@@ -1,9 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
-public class TitleSceneController : MonoBehaviour {
+public class TitleSceneController : MonoBehaviour
+{
 
-	// Use this for initialization
+#region public methods
+
+    public void OnTitleClick()
+    {
+        SceneManager.LoadScene("");
+    }
+
+#endregion
+
+    // Use this for initialization
 	void Start () {
 	
 	}
