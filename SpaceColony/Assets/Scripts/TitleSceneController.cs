@@ -32,6 +32,22 @@ public class TitleSceneController : MonoBehaviour
     // Use this for initialization
 	void Start () {
         PlayerPrefs.SetInt(PlayerPrefsKeys.FirstFlag, 0);
+
+
+        PlayerPrefs.SetInt(PlayerPrefsKeys.Resource, 100);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.Population, 100);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.Environment, 100);
+
+        PlayerPrefs.SetInt(PlayerPrefsKeys.LV_CollectResource, 1);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.LV_RestoreEnvironment, 1);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.LV_Equipment, 1);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.LV_Medicine, 1);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.LV_Food, 1);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.LV_ReproduceResource, 1);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.LV_Health, 1);
+
+
+
 	}
 
     void Awake()
