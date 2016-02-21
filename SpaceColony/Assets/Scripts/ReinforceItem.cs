@@ -64,12 +64,20 @@ public class ReinforceItem : MonoBehaviour {
     /// </summary>
     public void CheckButtonActivate()
     {
+        string pKey = "Lv_" + this.prefsName;
+        if (PlayerPrefs.GetInt(pKey) >= this.levelLimit)
+        {
+            this.levelUpButton.GetComponent<Button>().interactable = false;
+            return;
+        }
+
         if ((PlayerPrefs.GetInt(this.requiredCategory) + GetChangeValue(this.prefsName)) <= 0)
         {
             this.levelUpButton.GetComponent<Button>().interactable = false;
         }
-        string pKey = "Lv_"+this.prefsName;
-        if (PlayerPrefs.GetInt(pKey) >= this.levelLimit) this.levelUpButton.GetComponent<Button>().interactable = false;
+        else this.levelUpButton.GetComponent<Button>().interactable = true;
+        
+
     }
 
 
