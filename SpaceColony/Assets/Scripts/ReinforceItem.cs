@@ -114,10 +114,28 @@ public class ReinforceItem : MonoBehaviour {
         LevelUPProcess(this.prefsName);
         LevelTextUpdate();
 
+        // 資源採取の場合
+        if (this.prefsName == PlayerPrefsKeys.CollectResource)
+        {
+            CollectResource();
+        }
+
         // ボタンの無効化チェックを呼び出す
         this.rsCtrl.CheckButtonActivates();
     }
 
+
+
+    public void CollectResource()
+    {
+        int result = PlayerPrefs.GetInt(PlayerPrefsKeys.Resource)+(int)(0.1 * PlayerPrefs.GetInt(PlayerPrefsKeys.Population));
+
+        if (result >= 100)
+        {
+            PlayerPrefs.SetInt(PlayerPrefsKeys.Resource, 100);
+        }
+        else PlayerPrefs.SetInt(PlayerPrefsKeys.Resource, result);
+    }
 
     /// <summary>
     /// レベルの値を上げる
