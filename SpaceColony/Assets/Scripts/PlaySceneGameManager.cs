@@ -228,7 +228,7 @@ public class PlaySceneGameManager : MonoBehaviour {
 
 	void gameClearUpdate(){
 		time++;
-		if (time >= 180) {
+		if (time >= 300) {
 			SceneManager.LoadScene("Title");
 		}
 
@@ -251,7 +251,7 @@ public class PlaySceneGameManager : MonoBehaviour {
 			gameoverCanvas.SetActive (true);
 		}
 
-		if (time % 60 == 0) {
+		if (time % 60 == 59) {
 			yearUpdate ();
 		}
 		time++;
@@ -310,10 +310,10 @@ public class PlaySceneGameManager : MonoBehaviour {
 	public void kankyoClicked(){
 		saveData ();
 
-		/*
+
 		kankyoValue -= 10;
 		shigenValue += (int)(20 * jinkoValue * 0.01);
-		*/
+
 		//refresh ();
 	}
 
