@@ -35,7 +35,7 @@ public class ReinforceSceneController : MonoBehaviour {
         SetMyParameter2Text();
    
 
-        SetDisplay(PlayerPrefs.GetString(PlayerPrefsKeys.ActivateCategory);
+        SetDisplay(PlayerPrefs.GetString(PlayerPrefsKeys.ActivateCategory));
 
 
         //SetDisplay("Resource");
@@ -114,7 +114,6 @@ public class ReinforceSceneController : MonoBehaviour {
     /// </summary>
     public void CreateEachItem(int in_systemObjectIndex, Transform in_displayTrans, string in_systemName, string in_prefsKey, string in_detailSentence, string in_requiredCategory, Button in_levelUpButton, int in_levelLimit)
     {
-        // ここでin_item じゃなくて this.reinforceItem[in_indexnum] で呼べばいいかな
         this.reinforceItem[in_systemObjectIndex] = Instantiate(this.itemPrefab);
         this.reinforceItem[in_systemObjectIndex].transform.SetParent(in_displayTrans, false);
         in_levelUpButton = this.reinforceItem[in_systemObjectIndex].GetComponent<ReinforceItem>().SetParameter(this, in_systemName, in_prefsKey, in_detailSentence, in_requiredCategory, in_levelLimit);
