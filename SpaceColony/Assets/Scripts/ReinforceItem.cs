@@ -26,24 +26,32 @@ public class ReinforceItem : MonoBehaviour {
     /// <summary>消費する項目名</summary>
     private string requiredCategory;
 
-    private string prefsName; 
+    private string prefsName;
 
+
+    /// <summary>レベルが上がる上限値</summary>
+    private int levelLimit;
+
+    /// <summary>システムの名前</summary>
+    private string systemName;
 
     // ボタンのアクティベートを呼び出すよう
     private ReinforceSceneController rsCtrl;
 
-    public Button SetParameter(ReinforceSceneController in_rsCtrl, string in_systemName, string in_prefsKey, string in_detailSentence, string in_requiredCategory){
+    public Button SetParameter(ReinforceSceneController in_rsCtrl, string in_systemName, string in_prefsKey, string in_detailSentence, string in_requiredCategory, int in_levelLimit){
         this.rsCtrl = in_rsCtrl;
-        
+        this.systemName = in_systemName;
         this.systemNameText.text = in_systemName;
-        this.levelText.text = "Lv." + PlayerPrefs.GetInt(in_prefsKey, 1);
+        this.levelText.text = "Lv." + PlayerPrefs.GetInt("Lv_"+in_prefsKey, 1);
         this.infomationText.text = in_detailSentence;
         this.requiredCategory = in_requiredCategory;
 
         if (in_requiredCategory == "Resource") this.levelUpButtonLabel.text = "資源" + GetChangeValue(in_prefsKey).ToString();
         else if (in_requiredCategory == "Environment") this.levelUpButtonLabel.text = "環境" + GetChangeValue(in_prefsKey).ToString();
-       
-        
+
+
+        this.levelLimit = in_levelLimit;
+
         this.prefsName = in_prefsKey;
 
         CheckButtonActivate();
@@ -51,12 +59,17 @@ public class ReinforceItem : MonoBehaviour {
         return this.levelUpButton;
     }
 
+    /// <summary>
+    /// コストが足りないorレベルMAXのときはボタンを無効化
+    /// </summary>
     public void CheckButtonActivate()
     {
         if ((PlayerPrefs.GetInt(this.requiredCategory) + GetChangeValue(this.prefsName)) <= 0)
         {
             this.levelUpButton.GetComponent<Button>().interactable = false;
         }
+        string pKey = "Lv_"+this.prefsName;
+        if (PlayerPrefs.GetInt(pKey) >= this.levelLimit) this.levelUpButton.GetComponent<Button>().interactable = false;
     }
 
 
@@ -97,10 +110,31 @@ public class ReinforceItem : MonoBehaviour {
         int currentValue = PlayerPrefs.GetInt(this.requiredCategory);
         PlayerPrefs.SetInt(this.requiredCategory, currentValue + GetChangeValue(this.prefsName));
 
+
+        LevelUPProcess(this.prefsName);
+        LevelTextUpdate();
+
+        // ボタンの無効化チェックを呼び出す
         this.rsCtrl.CheckButtonActivates();
     }
 
 
+    /// <summary>
+    /// レベルの値を上げる
+    /// </summary>
+    /// <param name="in_systemName"></param>
+    public void LevelUPProcess(string in_systemName)
+    {
+        string pKey = "Lv_"+in_systemName;
+
+        if( PlayerPrefs.GetInt(pKey) < this.levelLimit)
+        PlayerPrefs.SetInt(pKey, PlayerPrefs.GetInt(pKey) + 1);
+    }
+
+    public void LevelTextUpdate()
+    {
+        this.levelText.text = "Lv." + PlayerPrefs.GetInt("Lv_" + this.prefsName, 0);
+    }
 
 
 
