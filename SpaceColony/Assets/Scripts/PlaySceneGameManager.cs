@@ -29,6 +29,9 @@ public class PlaySceneGameManager : MonoBehaviour {
 	public int nowYear = 0;
 	public string leftUpStr;//左上のUIの文字用
 
+
+	public string insekiMessage = "";
+
 	//基本パラメーター
 	public int jinkoValue;
 	public int shigenValue;
@@ -44,11 +47,12 @@ public class PlaySceneGameManager : MonoBehaviour {
 	private int shigenSaisyuLevel = 1;
 
 	//イベントに関する変数
-	private int insekiDamage = 30;
-	private int infuruDamage = 30;
-	private int kasaiDamage = 30;
-	private int michiDamage = 40;
-	private int mizuOsenDamage = 40;
+	private int insekiDamage = 18;
+	private int infuruDamage = 18;
+	private int kasaiDamage = 18;
+	private int michiDamage = 25;
+	private int mizuOsenDamage = 25;
+	private int kachikuDamage = 20;
 
 
 
@@ -63,8 +67,10 @@ public class PlaySceneGameManager : MonoBehaviour {
 
 	void Start () {
 		int tmp = PlayerPrefs.GetInt (PlayerPrefsKeys.FirstFlag,0);
-		tmp = 0;//とりあえず毎回初回起動フラグを立たせるためのゴリ押し。本来はタイトル画面で適切な処理をすると必要なくなります
+		//tmp = 0;//とりあえず毎回初回起動フラグを立たせるためのゴリ押し。本来はタイトル画面で適切な処理をすると必要なくなります
 
+		leftUpStr = "超スーパー銀河暦" + nowYear + "年";
+		leftUpText.text = leftUpStr;
 		//Debug.Log("AAA" + (tmp));
 		if (tmp == 0) {//初回起動のとき
 			PlayerPrefs.SetInt (PlayerPrefsKeys.FirstFlag, 1);
@@ -72,9 +78,7 @@ public class PlaySceneGameManager : MonoBehaviour {
 			shigenValue = 100;
 			kankyoValue = 100;
 		} else {
-			jinkoValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Population);
-			shigenValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Resource);
-			kankyoValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Environment);
+			loadData ();
 		}
 
 		//UIに出力
@@ -92,17 +96,9 @@ public class PlaySceneGameManager : MonoBehaviour {
 	}
 
 
-	//------------------------------------------------------
-	//発展形イベント関数
-	//------------------------------------------------------
-	void devEventUpdate(){
-
-	}
-
 	//-------------------------------------------------------
 	//基本パラメーターのアップデート関数
 	//-------------------------------------------------------
-
 	void jinkoUpdate(){
 		jinkoValue += 2;
 		if (jinkoValue > 100) {
@@ -120,6 +116,30 @@ public class PlaySceneGameManager : MonoBehaviour {
 
 
 
+	//------------------------------------------------------
+	//発展形イベント関数
+	//------------------------------------------------------
+	void devEventUpdate(){
+		int intResult = (int)(Random.value * 2);
+		switch (intResult) {
+		case 0:
+			newDevSuccessEventUpdate ();
+			break;
+		case 1:
+			findPlanetEventUpdate ();
+			break;
+		}
+	}
+
+	void newDevSuccessEventUpdate(){
+		jinkoValue += 10;
+		addLog (nowYear+"年目：　農産局が収穫量の多い稲の開発に成功、人口が10％増加しました");
+	}
+
+	void findPlanetEventUpdate(){
+		shigenValue += 20;
+		addLog (nowYear+"年目：　隕石群の中に鉱脈が発見され、資源を20％増やすことができました");
+	}
 
 	//---------------------------------------------------
 	//イベント系関数
@@ -127,61 +147,72 @@ public class PlaySceneGameManager : MonoBehaviour {
 	void eventUpdate(){
 
 		int intResult = 0;
+
 		float tmp;
-		if (Random.value * 100 <= nowYear * (1.3 - kankyoValue * 0.01) - eiseiLevel * 5) {
-			intResult = (int)(Random.value * 5);
-			switch (intResult) {
-			case 0:
-				infuruEvent ();
-				break;
-			case 1:
-				kasaiEvent ();
-				break;
-			case 2:
-				michiEvent ();
-				break;
-			case 3:
-				mizuOsenEvent ();
-				break;
-			case 4:
+		if (nowYear >= 0) {
+			if (Random.value * 100 <= nowYear * (1.3 - kankyoValue * 0.01) - eiseiLevel * 5) {
+				intResult = (int)(Random.value * 5);
+				switch (intResult) {
+				case 0:
+					infuruEvent ();
+					break;
+				case 1:
+					kasaiEvent ();
+					break;
+				case 2:
+					michiEvent ();
+					break;
+				case 3:
+					mizuOsenEvent ();
+					break;
+				case 4:
+					kachikuEvent ();
+					break;
+				}
+				return;
+			} 
 
-				break;
-			}
-		} else{
 			tmp = Random.value * 100;
-			if(tmp < nowYear * 0.2){
-
+			if (tmp < nowYear * 0.2) {
 				InsekiEvent ();
-			}
-			else if(Random.value * 100 < 20){
-
+				return;
 			}
 		}
+
+		if(Random.value * 100 < 20){
+			devEventUpdate ();
+		}
+
 	}
 	void InsekiEvent(){
-		jinkoValue -= insekiDamage - soubiLevel * 5;
-		kankyoValue -= insekiDamage - soubiLevel * 5;
-		addLog (nowYear+"年目：　いんせきなう");
+		jinkoValue -= insekiDamage - soubiLevel * 3;
+		kankyoValue -= insekiDamage - soubiLevel * 3;
+		addLog (nowYear+"年目：　空調区画に隕石が衝突、人口が"+ (insekiDamage - soubiLevel * 3) +"％、環境が"+ (insekiDamage - soubiLevel * 5) +"％減少しました");
 	}
 
 	void infuruEvent(){
-		jinkoValue -= infuruDamage - igakuLevel * 5;
-		addLog (nowYear+"年目：　いんふるなう");
+		jinkoValue -= infuruDamage - igakuLevel * 3;
+		addLog (nowYear+"年目：　インフルエンザが流行し、人口が"+(infuruDamage - igakuLevel * 3)+"％減少\n");
 	}
 
 	void kasaiEvent(){
-		jinkoValue -= kasaiDamage - syokuryoLevel * 5;
-		addLog (nowYear+"年目：　かさいなう");
+		jinkoValue -= kasaiDamage - syokuryoLevel * 3;
+		addLog (nowYear+"年目：　第三居住区画で火災事故が発生。人口の" + (kasaiDamage - syokuryoLevel * 3) + "％が失われました");
 	}
 
 	void michiEvent(){
-		jinkoValue -= michiDamage - igakuLevel * 5;
-		addLog (nowYear+"年目：　みちのやまうなう");
+		jinkoValue -= michiDamage - igakuLevel * 3;
+		addLog (nowYear+"年目：　新型流行病が発生。人口の"+ (michiDamage - igakuLevel * 3)+"％が失われました\n");
 	}
 
 	void mizuOsenEvent(){
-		jinkoValue -= mizuOsenDamage - syokuryoLevel * 5;
-		addLog (nowYear+"年目：　水質汚染なう");
+		jinkoValue -= mizuOsenDamage - syokuryoLevel * 3;
+		addLog (nowYear+"年目：　排水による水質汚染が深刻化し、人口が"+ (mizuOsenDamage - syokuryoLevel * 3 )+"％減りました");
+	}
+
+	void kachikuEvent(){
+		jinkoValue -= kachikuDamage - igakuLevel * 3;
+		addLog (nowYear+"年目：　排水による水質汚染が深刻化し、人口が"+ (kachikuDamage - igakuLevel * 3 )+"％減りました");
 	}
 
 
@@ -243,7 +274,7 @@ public class PlaySceneGameManager : MonoBehaviour {
 
 	void gamePlayingUpdate(){
 
-		if (nowYear >= 6) {
+		if (nowYear >= 300) {
 			gameState = GAME_CLEAR;
 			time = 0;
 			canvas.SetActive (false);
@@ -316,15 +347,19 @@ public class PlaySceneGameManager : MonoBehaviour {
 	public void kankyoClicked(){
 		saveData ();
 
+		PlayerPrefs.SetString (PlayerPrefsKeys.ActivateCategory			, PlayerPrefsKeys.Environment	);
+		SceneManager.LoadScene("Reinforce");
 
-		kankyoValue -= 10;
-		shigenValue += (int)(20 * jinkoValue * 0.01);
+		//kankyoValue -= 10;
+		//shigenValue += (int)(20 * jinkoValue * 0.01);
 
 		//refresh ();
 	}
 
 	public void shigenClicked(){
 		saveData ();
+		PlayerPrefs.SetString (PlayerPrefsKeys.ActivateCategory			, PlayerPrefsKeys.Resource	);
+		SceneManager.LoadScene("Reinforce");
 	}
 
 	public void jinkoClicked(){
@@ -332,7 +367,6 @@ public class PlaySceneGameManager : MonoBehaviour {
 		PlayerPrefs.SetString (PlayerPrefsKeys.ActivateCategory			, PlayerPrefsKeys.Population	);
 		SceneManager.LoadScene("Reinforce");
 	}
-
 
 	public void saveData(){
 		PlayerPrefs.SetInt (PlayerPrefsKeys.Population			, jinkoValue);
@@ -349,14 +383,17 @@ public class PlaySceneGameManager : MonoBehaviour {
 	}
 
 	void loadData(){
-
 		shigenSaiseiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.ReproduceResource);
-		kankyoSyuhukuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.);
-		soubiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.);
-		igakuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.);
-		syokuryoLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.);
-		eiseiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.);
-		shigenSaisyuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.);
+		kankyoSyuhukuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.RestoreEnvironment);
+		soubiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.Equipment);
+		igakuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.Medicine);
+		syokuryoLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.Food);
+		eiseiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.Health);
+		shigenSaisyuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.CollectResource);
+		jinkoValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Population);
+		shigenValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Resource);
+		kankyoValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Environment);
+		nowYear = PlayerPrefs.GetInt (PlayerPrefsKeys.NowYear);
 
 	}
 

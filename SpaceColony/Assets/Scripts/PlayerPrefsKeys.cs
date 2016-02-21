@@ -15,6 +15,15 @@ public class PlayerPrefsKeys {
 	public static readonly string Health= "Health";//衛生
 	public static readonly string FirstFlag = "FirstFlag";//初回起動フラグ  タイトルで０に初期化設定してほしい
 
+	//強化画面で使うような系のやつ
+	public static readonly string ActivateCategory =  "ActivateCategory";
+	public static readonly string LV_CollectResource = "Lv_CollectResource";//資源採取Level
+	public static readonly string LV_RestoreEnvironment = "Lv_RestoreEnvironment";//環境修復Level
+	public static readonly string LV_Equipment = "Lv_Equipment";//装備Level
+	public static readonly string LV_Medicine = "Lv_Medicine";//医学Level
+	public static readonly string LV_Food = "Lv_Food";//食料Level
+	public static readonly string LV_ReproduceResource = "Lv_ReproduceResource";//資源再生Level
+	public static readonly string LV_Health = "Lv_Health";//衛生Level
 
 	//PlaySceneでしか使わないんじゃないかなってもの
 	public static readonly string NowYear = "NowYear";
