@@ -406,13 +406,13 @@ public class PlaySceneGameManager : MonoBehaviour {
 	}
 
 	void loadData(){
-		shigenSaiseiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.ReproduceResource);
-		kankyoSyuhukuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.RestoreEnvironment);
-		soubiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.Equipment);
-		igakuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.Medicine);
-		syokuryoLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.Food);
-		eiseiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.Health);
-		shigenSaisyuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.CollectResource);
+		shigenSaiseiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.LV_ReproduceResource);
+		kankyoSyuhukuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.LV_RestoreEnvironment);
+		soubiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.LV_Equipment);
+		igakuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.LV_Medicine);
+		syokuryoLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.LV_Food);
+		eiseiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.LV_Health);
+		shigenSaisyuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.LV_CollectResource);
 		jinkoValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Population);
 		shigenValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Resource);
 		kankyoValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Environment);
