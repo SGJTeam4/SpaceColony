@@ -9,6 +9,11 @@ public class PlaySceneGameManager : MonoBehaviour {
 	public static int GAME_OVER = 1;
 	public static int GAME_PLAYING = 2;
 
+	public AudioClip audioClip;
+	AudioSource audioSource;
+
+
+
 	//オブジェクト参照用変数
 	public GameObject shipModel;
 	public GameObject canvas;
@@ -66,19 +71,26 @@ public class PlaySceneGameManager : MonoBehaviour {
 	}
 
 	void Start () {
+		//audioSource = gameObject.GetComponent<AudioSource>();
+
+
+
 		int tmp = PlayerPrefs.GetInt (PlayerPrefsKeys.FirstFlag,0);
 		//tmp = 0;//とりあえず毎回初回起動フラグを立たせるためのゴリ押し。本来はタイトル画面で適切な処理をすると必要なくなります
 
-		leftUpStr = "超スーパー銀河暦" + nowYear + "年";
-		leftUpText.text = leftUpStr;
 		//Debug.Log("AAA" + (tmp));
 		if (tmp == 0) {//初回起動のとき
 			PlayerPrefs.SetInt (PlayerPrefsKeys.FirstFlag, 1);
 			jinkoValue = 80;
 			shigenValue = 100;
 			kankyoValue = 100;
+
+			leftUpStr = "超スーパー銀河暦" + (nowYear+1) + "年";
+			leftUpText.text = leftUpStr;
 		} else {
 			loadData ();
+			leftUpStr = "超スーパー銀河暦" + (nowYear) + "年";
+			leftUpText.text = leftUpStr;
 		}
 
 		//UIに出力
@@ -279,6 +291,8 @@ public class PlaySceneGameManager : MonoBehaviour {
 			time = 0;
 			canvas.SetActive (false);
 			clearCanvas.SetActive (true);
+
+			//audioSource.Play();
 		}
 
 		if (judgeGameover () == true) {
