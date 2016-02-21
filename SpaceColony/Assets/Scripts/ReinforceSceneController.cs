@@ -95,7 +95,7 @@ public class ReinforceSceneController : MonoBehaviour {
 
             case "Population":
                 this.categoryLabel.text = "人口";
-                CreateEachItem(0, this.displayPlace[0], "医学", "Medicina", "医療技術を発展させ、病気により失われる命を減らすことができる", "Resource", this.levelUpButton[0], 5);
+                CreateEachItem(0, this.displayPlace[0], "医学", "Medicine", "医療技術を発展させ、病気により失われる命を減らすことができる", "Resource", this.levelUpButton[0], 5);
                 CreateEachItem(1, this.displayPlace[1], "食料", "Food", "災害時の食糧難により失われる命を減らすことができる", "Resource", this.levelUpButton[1], 5);
                 break;
 
