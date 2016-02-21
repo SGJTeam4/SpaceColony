@@ -28,22 +28,35 @@ public class ReinforceItem : MonoBehaviour {
 
     private string prefsName; 
 
-    public void SetParameter(string in_systemName, string in_prefsKey, string in_detailSentence, string in_requiredCategory){
+
+    // ボタンのアクティベートを呼び出すよう
+    private ReinforceSceneController rsCtrl;
+
+    public Button SetParameter(ReinforceSceneController in_rsCtrl, string in_systemName, string in_prefsKey, string in_detailSentence, string in_requiredCategory){
+        this.rsCtrl = in_rsCtrl;
+        
         this.systemNameText.text = in_systemName;
         this.levelText.text = "Lv." + PlayerPrefs.GetInt(in_prefsKey, 1);
         this.infomationText.text = in_detailSentence;
         this.requiredCategory = in_requiredCategory;
-        this.levelUpButtonLabel.text = in_requiredCategory + GetChangeValue(in_prefsKey).ToString();
+
+        if (in_requiredCategory == "Resource") this.levelUpButtonLabel.text = "資源" + GetChangeValue(in_prefsKey).ToString();
+        else if (in_requiredCategory == "Environment") this.levelUpButtonLabel.text = "環境" + GetChangeValue(in_prefsKey).ToString();
+       
+        
         this.prefsName = in_prefsKey;
 
+        CheckButtonActivate();
 
-        // 使えない時はグレー
-        if ((PlayerPrefs.GetInt(in_requiredCategory) - GetChangeValue(in_prefsKey)) <= 0)
+        return this.levelUpButton;
+    }
+
+    public void CheckButtonActivate()
+    {
+        if ((PlayerPrefs.GetInt(this.requiredCategory) + GetChangeValue(this.prefsName)) <= 0)
         {
             this.levelUpButton.GetComponent<Button>().interactable = false;
         }
-
-        //this.levelUpButton.onClick.AddListener(() => OnPressedLevelUp());
     }
 
 
@@ -82,8 +95,13 @@ public class ReinforceItem : MonoBehaviour {
     {
         // 押されたボタンによって値を変更
         int currentValue = PlayerPrefs.GetInt(this.requiredCategory);
-        PlayerPrefs.SetInt(this.requiredCategory, currentValue - GetChangeValue(this.prefsName));
+        PlayerPrefs.SetInt(this.requiredCategory, currentValue + GetChangeValue(this.prefsName));
+
+        this.rsCtrl.CheckButtonActivates();
     }
+
+
+
 
 
 }
