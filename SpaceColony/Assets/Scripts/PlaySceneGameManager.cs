@@ -83,7 +83,7 @@ public class PlaySceneGameManager : MonoBehaviour {
 			shigenValue = 100;
 			kankyoValue = 100;
 
-			leftUpStr = "超スーパー銀河暦" + (nowYear+1) + "年";
+			leftUpStr = "超スーパー銀河暦" + (nowYear) + "年";
 			leftUpText.text = leftUpStr;
 		} else {
 			loadData ();
@@ -296,7 +296,7 @@ public class PlaySceneGameManager : MonoBehaviour {
 			time = 0;
 		}
 
-		if (time % 60 == 59) {
+		if (time % 120 == 119) {
 			yearUpdate ();
 		}
 		time++;
