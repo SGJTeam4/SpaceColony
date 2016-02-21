@@ -31,15 +31,13 @@ public class TitleSceneController : MonoBehaviour
 
     // Use this for initialization
 	void Start () {
-	
+        PlayerPrefs.SetInt(PlayerPrefsKeys.FirstFlag, 0);
 	}
 
     void Awake()
     {
         titleLogoImage = titleLogo.GetComponent<Image>();
         titleLogoImage.sprite = titleLogoImages[0];
-
-        titleLogo.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width, Screen.height);
     }
 	
 	// Update is called once per frame
