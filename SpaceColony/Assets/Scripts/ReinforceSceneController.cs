@@ -47,16 +47,16 @@ public class ReinforceSceneController : MonoBehaviour {
 
 
     public void TestInitParameter(){
-        PlayerPrefs.SetInt("Resource", 100);
-        PlayerPrefs.SetInt("Population", 100);
-        PlayerPrefs.SetInt("Environment", 100);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.Resource, 100);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.Population, 100);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.Environment, 100);
     }
 
 
     public void SetMyParameter(){
-        this.categoryName[0].text = PlayerPrefs.GetInt("Resource").ToString();
-        this.categoryName[1].text = PlayerPrefs.GetInt("Population").ToString();
-        this.categoryName[2].text = PlayerPrefs.GetInt("Environment").ToString();
+        this.categoryName[0].text = PlayerPrefs.GetInt(PlayerPrefsKeys.Resource).ToString();
+        this.categoryName[1].text = PlayerPrefs.GetInt(PlayerPrefsKeys.Population).ToString();
+        this.categoryName[2].text = PlayerPrefs.GetInt(PlayerPrefsKeys.Environment).ToString();
 
     }
 
