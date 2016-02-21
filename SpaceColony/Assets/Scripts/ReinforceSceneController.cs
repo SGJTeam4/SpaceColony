@@ -17,22 +17,28 @@ public class ReinforceSceneController : MonoBehaviour {
     private Button[] levelUpButton = new Button[3];
 
 
+
+
     // 左上のボタンラベル
     public Text categoryLabel;
 
 
     public GameObject itemPrefab;
 
-
-    // おためしよう
+    /// <summary>各カテゴリ(人口、資源、環境)のテキスト </summary>
     public Text[] categoryName = new Text[3];
 
 
 	// Use this for initialization
 	void Start () {
-        TestInitParameter();
+        //TestInitParameter();
+        SetMyParameter2Text();
+   
 
-        SetDisplay("Resource");
+        //SetDisplay(PlayerPrefs.GetString(PlayerPrefsKeys.ActivateCategory);
+
+
+        //SetDisplay("Resource");
         //SetDisplay("Population");
         //SetDisplay("Environment");
 
@@ -41,23 +47,34 @@ public class ReinforceSceneController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    SetMyParameter();
+	    //SetMyParameter();
 	}
 
 
 
     public void TestInitParameter(){
-        PlayerPrefs.SetInt(PlayerPrefsKeys.Resource, 100);
-        PlayerPrefs.SetInt(PlayerPrefsKeys.Population, 100);
-        PlayerPrefs.SetInt(PlayerPrefsKeys.Environment, 100);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.Resource, 1000);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.Population, 1000);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.Environment, 1000);
+
+        PlayerPrefs.SetInt(PlayerPrefsKeys.LV_CollectResource,1);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.LV_RestoreEnvironment,1);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.LV_Equipment,1);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.LV_Medicine,1);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.LV_Food,1);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.LV_ReproduceResource, 1);
+        PlayerPrefs.SetInt(PlayerPrefsKeys.LV_Health,1);
+
     }
 
 
-    public void SetMyParameter(){
+    /// <summary>
+    /// 各カテゴリーのパラメータの取得と反映
+    /// </summary>
+    public void SetMyParameter2Text(){
         this.categoryName[0].text = PlayerPrefs.GetInt(PlayerPrefsKeys.Resource).ToString();
         this.categoryName[1].text = PlayerPrefs.GetInt(PlayerPrefsKeys.Population).ToString();
         this.categoryName[2].text = PlayerPrefs.GetInt(PlayerPrefsKeys.Environment).ToString();
-
     }
 
 
@@ -71,21 +88,21 @@ public class ReinforceSceneController : MonoBehaviour {
         {
             case "Resource":
                 this.categoryLabel.text = "資源";
-                CreateEachItem(0, this.displayPlace[0], "資源採取", "CollectResource", "自然環境に手を加え、エネルギー資源を得る", "Environment", this.levelUpButton[0]);
-                CreateEachItem(1, this.displayPlace[1], "環境修復", "RestoreEnvironment", "植林技術などで、環境の回復能力を上げる", "Resource", this.levelUpButton[1]);
-                CreateEachItem(2, this.displayPlace[2], "装備", "Equipment", "隕石の飛来により失われる命を減らすことができる", "Resource", this.levelUpButton[2]);                   
+                CreateEachItem(0, this.displayPlace[0], "資源採取", "CollectResource", "自然環境に手を加え、エネルギー資源を得る", "Environment", this.levelUpButton[0], 10000);
+                CreateEachItem(1, this.displayPlace[1], "環境修復", "RestoreEnvironment", "植林技術などで、環境の回復能力を上げる", "Resource", this.levelUpButton[1], 10);
+                CreateEachItem(2, this.displayPlace[2], "装備", "Equipment", "隕石の飛来により失われる命を減らすことができる", "Resource", this.levelUpButton[2], 5);                   
                 break;
 
             case "Population":
                 this.categoryLabel.text = "人口";
-                CreateEachItem(0, this.displayPlace[0], "医学", "Medicina", "医療技術を発展させ、病気により失われる命を減らすことができる", "Resource", this.levelUpButton[0]);
-                CreateEachItem(1, this.displayPlace[1], "食料", "Food", "災害時の食糧難により失われる命を減らすことができる", "Resource", this.levelUpButton[1]);
+                CreateEachItem(0, this.displayPlace[0], "医学", "Medicina", "医療技術を発展させ、病気により失われる命を減らすことができる", "Resource", this.levelUpButton[0], 5);
+                CreateEachItem(1, this.displayPlace[1], "食料", "Food", "災害時の食糧難により失われる命を減らすことができる", "Resource", this.levelUpButton[1], 5);
                 break;
 
             case "Environment":
                 this.categoryLabel.text = "環境";
-                CreateEachItem(0, this.displayPlace[0], "資源再生", "ReproduceResource", "再生可能エネルギーの導入により、資源の消費量を減らす", "Resource", this.levelUpButton[0]);
-                CreateEachItem(1, this.displayPlace[1], "衛生", "Health", "衛生技術を発展させ、疫病や災害の発生率を下げる", "Resource", this.levelUpButton[1]);                   
+                CreateEachItem(0, this.displayPlace[0], "資源再生", "ReproduceResource", "再生可能エネルギーの導入により、資源の消費量を減らす", "Resource", this.levelUpButton[0], 5);
+                CreateEachItem(1, this.displayPlace[1], "衛生", "Health", "衛生技術を発展させ、疫病や災害の発生率を下げる", "Resource", this.levelUpButton[1], 10);                   
                 break;
         }
 
@@ -95,18 +112,12 @@ public class ReinforceSceneController : MonoBehaviour {
     /// <summary>
     /// 各システムオブジェクトを作成
     /// </summary>
-    /// <param name="in_item">システムオブジェクトのインスタンス用</param>
-    /// <param name="in_displayTrans">生成位置</param>
-    /// <param name="in_systemName">システムオブジェクトの名前</param>
-    /// <param name="in_prefsKey">PlayerPrefsのキーの名前</param>
-    /// <param name="in_detailSentence">説明文</param>
-    /// <param name="in_buttonLabel">レベルアップボタンのラベル名</param>
-    public void CreateEachItem(int in_systemObjectIndex, Transform in_displayTrans, string in_systemName, string in_prefsKey, string in_detailSentence, string in_requiredCategory, Button in_levelUpButton)
+    public void CreateEachItem(int in_systemObjectIndex, Transform in_displayTrans, string in_systemName, string in_prefsKey, string in_detailSentence, string in_requiredCategory, Button in_levelUpButton, int in_levelLimit)
     {
         // ここでin_item じゃなくて this.reinforceItem[in_indexnum] で呼べばいいかな
         this.reinforceItem[in_systemObjectIndex] = Instantiate(this.itemPrefab);
         this.reinforceItem[in_systemObjectIndex].transform.SetParent(in_displayTrans, false);
-        in_levelUpButton = this.reinforceItem[in_systemObjectIndex].GetComponent<ReinforceItem>().SetParameter(this, in_systemName, in_prefsKey, in_detailSentence, in_requiredCategory);
+        in_levelUpButton = this.reinforceItem[in_systemObjectIndex].GetComponent<ReinforceItem>().SetParameter(this, in_systemName, in_prefsKey, in_detailSentence, in_requiredCategory, in_levelLimit);
     }
 
 
@@ -117,10 +128,16 @@ public class ReinforceSceneController : MonoBehaviour {
     }
 
 
+    /// <summary>
+    /// コストが足りない場合ボタンを無効化する
+    /// </summary>
     public void CheckButtonActivates()
     {
+        SetMyParameter2Text();
         for(int i=0; i<3; i++){
             if (this.reinforceItem[i] != null) this.reinforceItem[i].GetComponent<ReinforceItem>().CheckButtonActivate();
         }
     }
+
+
 }
