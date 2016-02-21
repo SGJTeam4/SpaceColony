@@ -92,6 +92,12 @@ public class PlaySceneGameManager : MonoBehaviour {
 	}
 
 
+	//------------------------------------------------------
+	//発展形イベント関数
+	//------------------------------------------------------
+	void devEventUpdate(){
+
+	}
 
 	//-------------------------------------------------------
 	//基本パラメーターのアップデート関数
@@ -228,7 +234,7 @@ public class PlaySceneGameManager : MonoBehaviour {
 
 	void gameClearUpdate(){
 		time++;
-		if (time >= 180) {
+		if (time >= 300) {
 			SceneManager.LoadScene("Title");
 		}
 
@@ -251,7 +257,7 @@ public class PlaySceneGameManager : MonoBehaviour {
 			gameoverCanvas.SetActive (true);
 		}
 
-		if (time % 60 == 0) {
+		if (time % 60 == 59) {
 			yearUpdate ();
 		}
 		time++;
@@ -310,10 +316,10 @@ public class PlaySceneGameManager : MonoBehaviour {
 	public void kankyoClicked(){
 		saveData ();
 
-		/*
+
 		kankyoValue -= 10;
 		shigenValue += (int)(20 * jinkoValue * 0.01);
-		*/
+
 		//refresh ();
 	}
 
@@ -323,6 +329,7 @@ public class PlaySceneGameManager : MonoBehaviour {
 
 	public void jinkoClicked(){
 		saveData ();
+		PlayerPrefs.SetString (PlayerPrefsKeys.ActivateCategory			, PlayerPrefsKeys.Population	);
 		SceneManager.LoadScene("Reinforce");
 	}
 
@@ -340,5 +347,19 @@ public class PlaySceneGameManager : MonoBehaviour {
 		PlayerPrefs.SetInt (PlayerPrefsKeys.Health				, eiseiLevel);
 		PlayerPrefs.SetInt (PlayerPrefsKeys.NowYear				, nowYear);
 	}
+
+	void loadData(){
+
+		shigenSaiseiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.ReproduceResource);
+		kankyoSyuhukuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.);
+		soubiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.);
+		igakuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.);
+		syokuryoLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.);
+		eiseiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.);
+		shigenSaisyuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.);
+
+	}
+
+
 
 }
