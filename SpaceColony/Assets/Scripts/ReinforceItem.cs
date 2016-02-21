@@ -94,11 +94,11 @@ public class ReinforceItem : MonoBehaviour {
 
         int value = 0;
 
-        int level = PlayerPrefs.GetInt(in_systemName, 1);
+        int level = PlayerPrefs.GetInt("Lv_"+in_systemName);
 
         if (in_systemName == "CollectResource") return -10;
-        else if (in_systemName == "RestoreEnvironment" || in_systemName == "Health") return -1 * (10 + (5 * level));
-        else if (in_systemName == "Equipment" || in_systemName == "Medicina" || in_systemName == "Food" || in_systemName == "ReproduceResource") return -1 * (20 + (5 * level));
+        else if (in_systemName == "RestoreEnvironment" || in_systemName == "ReproduceResource") return -1 * (5 + (5 * level));
+        else if (in_systemName == "Equipment" || in_systemName == "Medicine" || in_systemName == "Food" || in_systemName == "Health") return -1 * (15 + (5 * level));
 
         return value;
     }
@@ -119,6 +119,8 @@ public class ReinforceItem : MonoBehaviour {
         {
             CollectResource();
         }
+
+        ButtonLabelUpdate();
 
         // ボタンの無効化チェックを呼び出す
         this.rsCtrl.CheckButtonActivates();
@@ -154,6 +156,12 @@ public class ReinforceItem : MonoBehaviour {
         this.levelText.text = "Lv." + PlayerPrefs.GetInt("Lv_" + this.prefsName, 0);
     }
 
+
+    public void ButtonLabelUpdate()
+    {
+        if (this.requiredCategory == "Resource") this.levelUpButtonLabel.text = "資源" + GetChangeValue(this.prefsName).ToString();
+        else if (this.requiredCategory == "Environment") this.levelUpButtonLabel.text = "環境" + GetChangeValue(this.prefsName).ToString();
+    }
 
 
 }
