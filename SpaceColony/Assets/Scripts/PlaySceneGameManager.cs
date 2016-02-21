@@ -9,8 +9,6 @@ public class PlaySceneGameManager : MonoBehaviour {
 	public static int GAME_OVER = 1;
 	public static int GAME_PLAYING = 2;
 
-	public AudioClip audioClip;
-	AudioSource audioSource;
 
 
 
@@ -280,8 +278,6 @@ public class PlaySceneGameManager : MonoBehaviour {
 		if (time >= 300) {
 			SceneManager.LoadScene("Title");
 		}
-
-
 	}
 
 	void gamePlayingUpdate(){
@@ -298,8 +294,6 @@ public class PlaySceneGameManager : MonoBehaviour {
 		if (judgeGameover () == true) {
 			gameState = GAME_OVER;
 			time = 0;
-			canvas.SetActive (false);
-			gameoverCanvas.SetActive (true);
 		}
 
 		if (time % 60 == 59) {
@@ -313,9 +307,24 @@ public class PlaySceneGameManager : MonoBehaviour {
 	void gameoverUpdate(){
 
 		time++;
-		if (time >= 300) {
+		if (time >= 500) {
 			SceneManager.LoadScene("Title");
 		}
+
+		if (time == 100) {
+			canvas.SetActive (false);
+		}
+		if (time == 200) {
+			gameoverCanvas.SetActive (true);
+		}
+		shipModel.transform.Rotate (
+			new Vector3(
+				0,
+				0,
+				0.2f * 60.0f * Time.deltaTime
+			),
+			Space.Self
+		);
 	}
 
 	void Update () {
@@ -397,13 +406,13 @@ public class PlaySceneGameManager : MonoBehaviour {
 	}
 
 	void loadData(){
-		shigenSaiseiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.ReproduceResource);
-		kankyoSyuhukuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.RestoreEnvironment);
-		soubiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.Equipment);
-		igakuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.Medicine);
-		syokuryoLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.Food);
-		eiseiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.Health);
-		shigenSaisyuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.CollectResource);
+		shigenSaiseiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.LV_ReproduceResource);
+		kankyoSyuhukuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.LV_RestoreEnvironment);
+		soubiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.LV_Equipment);
+		igakuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.LV_Medicine);
+		syokuryoLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.LV_Food);
+		eiseiLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.LV_Health);
+		shigenSaisyuLevel = PlayerPrefs.GetInt (PlayerPrefsKeys.LV_CollectResource);
 		jinkoValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Population);
 		shigenValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Resource);
 		kankyoValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Environment);
