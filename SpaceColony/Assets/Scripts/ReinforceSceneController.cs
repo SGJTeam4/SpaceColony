@@ -35,7 +35,7 @@ public class ReinforceSceneController : MonoBehaviour {
         SetMyParameter2Text();
    
 
-        //SetDisplay(PlayerPrefs.GetString(PlayerPrefsKeys.ActivateCategory);
+        SetDisplay(PlayerPrefs.GetString(PlayerPrefsKeys.ActivateCategory);
 
 
         //SetDisplay("Resource");
