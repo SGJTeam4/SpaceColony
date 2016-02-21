@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class PlayerPrefsKeys {
+	//シーン間で共通だと思われるもの
 	public static readonly string Resource = "Resource";//資源
 	public static readonly string Population = "Population";//人口
 	public static readonly string Environment = "Environment";//環境
@@ -13,4 +14,8 @@ public class PlayerPrefsKeys {
 	public static readonly string ReproduceResource= "ReproduceResource";//資源再生
 	public static readonly string Health= "Health";//衛生
 	public static readonly string FirstFlag = "FirstFlag";//初回起動フラグ  タイトルで０に初期化設定してほしい
+
+
+	//PlaySceneでしか使わないんじゃないかなってもの
+	public static readonly string NowYear = "NowYear";
 }
