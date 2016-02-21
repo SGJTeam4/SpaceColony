@@ -1,11 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 //using System;
 
 public class PlaySceneGameManager : MonoBehaviour {
+	public static int GAME_CLEAR = 0;
+	public static int GAME_OVER = 1;
+	public static int GAME_PLAYING = 2;
+
 	//オブジェクト参照用変数
 	public GameObject shipModel;
+	public GameObject canvas;
+	public GameObject clearCanvas;
+	public GameObject gameoverCanvas;
+	public GameObject clearMessage;
+	public GameObject gameoverMessage;
 	public Text leftUpText; 
 	public Text Log1;
 	public Text Log2;
@@ -15,6 +25,7 @@ public class PlaySceneGameManager : MonoBehaviour {
 	public Text KankyoPercent;
 
 	private int time = 0;//とりあえずのTime用変数
+	private int gameState = GAME_PLAYING;
 	public int nowYear = 0;
 	public string leftUpStr;//左上のUIの文字用
 
@@ -65,6 +76,11 @@ public class PlaySceneGameManager : MonoBehaviour {
 			shigenValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Resource);
 			kankyoValue = PlayerPrefs.GetInt (PlayerPrefsKeys.Environment);
 		}
+
+		//UIに出力
+		JinkoPercent.text = jinkoValue + "%";
+		ShigenPercent.text = shigenValue + "%";
+		KankyoPercent.text = kankyoValue + "%";
 	}
 
 
@@ -202,11 +218,68 @@ public class PlaySceneGameManager : MonoBehaviour {
 			shigenValue = 0;
 	}
 
-	void Update () {
+	bool judgeGameover(){
+		if (jinkoValue <= 0 || kankyoValue <= 0 || shigenValue <= 0) {
+			return true;
+		}
+		return false;
+
+	}
+
+	void gameClearUpdate(){
+		time++;
+		if (time >= 180) {
+			SceneManager.LoadScene("Title");
+		}
+
+
+	}
+
+	void gamePlayingUpdate(){
+
+		if (nowYear >= 6) {
+			gameState = GAME_CLEAR;
+			time = 0;
+			canvas.SetActive (false);
+			clearCanvas.SetActive (true);
+		}
+
+		if (judgeGameover () == true) {
+			gameState = GAME_OVER;
+			time = 0;
+			canvas.SetActive (false);
+			gameoverCanvas.SetActive (true);
+		}
+
 		if (time % 60 == 0) {
 			yearUpdate ();
 		}
 		time++;
+
+
+	}
+
+	void gameoverUpdate(){
+
+		time++;
+		if (time >= 300) {
+			SceneManager.LoadScene("Title");
+		}
+	}
+
+	void Update () {
+
+		switch(gameState){
+		case 2:
+			gamePlayingUpdate ();
+			break;
+		case 0:
+			gameClearUpdate ();
+			break;
+		case 1:
+			gameoverUpdate ();
+			break;
+		}
 
 
 		shipModel.transform.Rotate (
@@ -236,10 +309,12 @@ public class PlaySceneGameManager : MonoBehaviour {
 	//---------------------------------------------------------
 	public void kankyoClicked(){
 		saveData ();
+
 		/*
 		kankyoValue -= 10;
-		shigenValue += 20 * jinkoValue * 0.01;
-		refresh ();*/
+		shigenValue += (int)(20 * jinkoValue * 0.01);
+		*/
+		//refresh ();
 	}
 
 	public void shigenClicked(){
@@ -248,6 +323,7 @@ public class PlaySceneGameManager : MonoBehaviour {
 
 	public void jinkoClicked(){
 		saveData ();
+		SceneManager.LoadScene("Reinforce");
 	}
 
 
@@ -262,6 +338,7 @@ public class PlaySceneGameManager : MonoBehaviour {
 		PlayerPrefs.SetInt (PlayerPrefsKeys.Food				, syokuryoLevel);
 		PlayerPrefs.SetInt (PlayerPrefsKeys.ReproduceResource	, shigenSaiseiLevel);
 		PlayerPrefs.SetInt (PlayerPrefsKeys.Health				, eiseiLevel);
+		PlayerPrefs.SetInt (PlayerPrefsKeys.NowYear				, nowYear);
 	}
 
 }
